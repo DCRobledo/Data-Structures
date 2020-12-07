@@ -12,7 +12,10 @@ public class BST {
     public Node root;
 
     public void insert(Node root, int value){
-        if(this.root == null) this.root = new Node(value);
+        if(this.root == null) {
+            this.root = new Node(value);
+            return;
+        } 
 
         if(value <= root.data){
             if(root.left == null) root.left = new Node(value);
