@@ -31,9 +31,11 @@ public class Stack {
     }
 
     public int pop() {
+        Node node = top;
+
         top = top.next;
 
-        return top.data;
+        return node.data;
     }
     
 }
