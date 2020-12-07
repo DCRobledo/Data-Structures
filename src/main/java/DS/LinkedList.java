@@ -48,4 +48,17 @@ public class LinkedList {
             current = current.next;
         }
     }
+
+    public int get(int index) {
+        int i = 0;
+        Node current = head;
+
+        while(i < index && current != null){
+            current = current.next;
+            i++;
+        }
+            
+
+        return current.data;
+    }
 }
