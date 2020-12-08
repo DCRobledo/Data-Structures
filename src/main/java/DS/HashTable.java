@@ -61,7 +61,7 @@ public class HashTable<K, V> {
                 data.add(null);
             for(Node<K, V> current : temp){
                 while (current != null) {
-                    add((K) node.key, (V) node.value);
+                    add((K) current.key, (V) current.value);
                     current = current.next;
                 }
             }
@@ -69,7 +69,8 @@ public class HashTable<K, V> {
     }
 
     public V get(K key) {
-        int index = convertToIndex(getHashCode(key));
+        int hashCode = getHashCode(key);
+        int index = convertToIndex(hashCode);
         Node<K, V> node = data.get(index);
 
         while(node != null){
