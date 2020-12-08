@@ -32,7 +32,7 @@ public class ArrayList {
     }
 
     public void remove(int i){
-        for(int x = 0; x<data.length-1; x++) data[x] = data[x+1];
+        for(int x = i; x<data.length-1; x++) data[x] = data[x+1];
         this.index--;
     }
 }
