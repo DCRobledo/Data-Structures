@@ -2,62 +2,87 @@ package DS;
 
 import java.util.HashMap;
 
+
+
 public class Trie {
+    public static final int ALPHABET_SIZE = 26;
+
     private class Node {
-        private HashMap<Character, Node> children;
-        private String data;
+        private Node[] children = new Node[ALPHABET_SIZE];
         private boolean isCompleteWord;
 
-        private boolean isEmpty() {
-            return data == null;
+        private Node() {
+            for(int i = 0; i < ALPHABET_SIZE; i++) children[i] = null;
+            isCompleteWord = false;
         }
     }
 
     public Node root;
 
-    public void insert(String word) {
-        Node current = root;
+    public boolean isEmpty(Node node) {
+        for(int i = 0; i<ALPHABET_SIZE; i++)
+            if(node.children[i] == null) return false;
+        return true;
+    }
 
-        for(char character: word.toCharArray())
-            current = current.children.computeIfAbsent(character, c -> new Node());
-        
+    public void insert(String word) {
+        int level;
+        int length = word.length();
+        int index;
+
+        if(root == null) root = new Node();
+
+        Node current = root;
+        for(level = 0; level<length; level++) {
+            index = word.charAt(level) - 'a';
+
+            if(current.children[index] == null)
+                current.children[index] = new Node();
+
+            current = current.children[index];
+        }
+
         current.isCompleteWord = true;
     }
 
     public boolean find(String word) {
-        Node current = root;
+        int level;
+        int length = word.length();
+        int index;
 
-        for(int i = 0; i<word.length(); i++){
-            char character = word.charAt(i);
-            Node node = current.children.get(character);
-            if(node == null) return false;
-            current = node;
+        Node current = root;
+        for(level = 0; level<length; level++) {
+            index = word.charAt(level) - 'a';
+
+            if(current.children[index] == null) return false;
+
+            current = current.children[index];
         }
 
-        return current.isCompleteWord;
+        return (current != null && current.isCompleteWord);
 
     }
 
-    public void delete(String word){
+    public void delete(String word) {
         delete(root, word, 0);
     }
 
-    public boolean delete(Node current, String word, int index){
+    public Node delete(Node root, String word, int index){
+        if(root == null) return null;
+
         if(index == word.length()) {
-            if(!current.isCompleteWord) return false;
-            current.isCompleteWord = false;
-            return current.children.isEmpty();
+            if(root.isCompleteWord) root.isCompleteWord = false;
+
+            if(isEmpty(root)) root = null;
+
+            return root;
         }
 
-        char character = word.charAt(index);
-        Node node = current.children.get(character);
-        if(node == null) return false;
+        int wordIndex = word.charAt(index) - 'a';
+        root.children[wordIndex] = delete(root.children[wordIndex], word, index + 1);
 
-        boolean shouldDeleteCurrentNode = delete(node, word, index + 1) && !node.isCompleteWord;
-        if(shouldDeleteCurrentNode) {
-            current.children.remove(character);
-            return current.children.isEmpty();
-        }
-        return false;
+        if(isEmpty(root) && !root.isCompleteWord) root = null;
+
+        return root;
     }
 }
