@@ -23,4 +23,29 @@ public class Graph {
     public void addEdge(int edge, int vertexOne, int vertexTwo) {
         edges[edge].add(new Edge(vertexOne, vertexTwo));
     }
+
+    public List<Integer> traverse() {
+        LinkedList<Integer> result = new LinkedList<>();
+
+        LinkedList<Integer> visited = new LinkedList<>();
+        
+        for(int i = 0; i<edges.length; i++) visited.add(i, null);
+
+        for(int i = 0; i < edges.length; i++) {
+            int vertexOne = edges[i].get(0).vertexOne;
+            int vertexTwo = edges[i].get(0).vertexTwo;
+
+            if(!visited.contains(vertexOne)) {
+                result.add(vertexOne);
+                visited.add(vertexOne);
+            }
+
+            if(!visited.contains(vertexTwo)) {
+                result.add(vertexTwo);
+                visited.add(vertexTwo);
+            }
+        }
+
+        return result;
+    }
 }
